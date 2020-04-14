@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.OrderDao">
+    <select id="findByCondition" parameterType="order" resultMap="orderMap">
+        select * from t_order
+        <where>
+            <if test="id !=null">
+               and id=#{id}
+            </if>
+            <if test="memberId !=null">
+               and member_id=#{memberId}
+            </if>
+            <if test="orderDate !=null">
+              and orderDate=#{orderDate}
+            </if>
+            <if test="orderType !=null">
+              and  orderType=#{orderType}
+            </if>
+            <if test="orderStatus !=null">
+                orderStatus=#{orderStatus}
+            </if>
+            <if test="setmealId !=null">
+               and setmeal_id=#{setmealId}
+            </if>
+        </where>
+    </select>
+    <resultMap id="orderMap" type="order">
+        <id column="id" property="id"/>
+        <result column="member_id" property="memberId"/>
+        <result column="orderDate" property="orderDate"/>
+        <result column="orderType" property="orderType"/>
+        <result column="orderStatus" property="orderStatus"/>
+        <result column="setmeal_id" property="setmealId"/>
+    </resultMap>
+    <insert id="add" parameterType="order">
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into t_order (member_id,orderDate,orderType,orderStatus,setmeal_id) values
+        (#{memberId},#{orderDate},#{orderType},#{orderStatus},#{setmealId})
+    </insert>
+
+    <select id="findById" resultType="map" parameterType="int">
+        select m.name member,sm.name setmeal,o.orderDate orderDate,o.orderType orderType,o.setmeal_id setmealId from t_order o,t_setmeal sm,t_member m
+WHERE o.id=#{id} and o.member_id=m.id and o.setmeal_id=sm.id
+    </select>
+    <select id="findCountOrderByToday" resultType="int" parameterType="map">
+        select count(*) from t_order where orderDate=#{today}
+    </select>
+
+    <select id="findCountMemberByDate" parameterType="map" resultType="int">
+          select count(*) from t_order where orderDate between #{begin} and #{end}
+    </select>
+    <select id="findVisitCountOrderByToday" resultType="int" parameterType="map">
+          select count(*) from t_order where orderDate=#{todat} and orderStatus="已到诊"
+    </select>
+    <select id="findVisitCountMemberByDate" parameterType="map" resultType="int">
+                  select count(*) from t_order where orderStatus="已到诊" and orderDate between #{begin} and #{end}
+    </select>
+    <select id="findHotSetmeal" resultType="map">
+
+        SELECT s.name,count(o.id) setmeal_count ,count(o.id)/(SELECT count(*) FROM t_order) proportion,s.remark remark FROM t_order o,t_setmeal s
+        WHERE o.setmeal_id=s.id GROUP BY s.name ORDER BY proportion desc limit 0,4
+    </select>
+</mapper>

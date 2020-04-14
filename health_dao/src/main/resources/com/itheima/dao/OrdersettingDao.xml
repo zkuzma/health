@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.OrdersettingDao">
+    <select id="findCountByOrderSettingDate" parameterType="date" resultType="int">
+        select count(*) from t_ordersetting where orderDate=#{orderDate}
+    </select>
+
+    <update id="updateOrdersetting" parameterType="OrderSetting">
+        update t_ordersetting set number=#{number} where orderDate=#{orderDate}
+    </update>
+
+    <insert id="addOrdersetting" parameterType="OrderSetting">
+        insert into t_ordersetting
+            (orderDate,number,reservations)
+        values
+            (#{orderDate},#{number},#{reservations})
+    </insert>
+
+
+    <select id="getOrderSettingByMonth" parameterType="string" resultType="OrderSetting">
+        select * from t_ordersetting where orderDate like #{date}"%"
+    </select>
+
+    <select id="findOrdersettingByOrderDate" resultType="OrderSetting" parameterType="date">
+         select * from t_ordersetting where orderDate=#{orderDate}
+    </select>
+
+    <update id="updateReservations" parameterType="date">
+          update t_ordersetting set reservations = reservations+1 where orderDate = #{orderDate}
+    </update>
+</mapper>

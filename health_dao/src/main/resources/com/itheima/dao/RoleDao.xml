@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.RoleDao">
+    <select id="findRolesByUserId" parameterType="int" resultMap="RoleMap">
+        select * from t_role where id in (select role_id from t_user_role where user_id=#{userId})
+    </select>
+    <resultMap id="RoleMap" type="role">
+        <id column="id" property="id"/>
+        <collection property="permissions" column="id" select="com.itheima.dao.PermissionDao.findPermissionByRoleId"></collection>
+    </resultMap>
+    <!--分页查询角色-->
+    <select id="findPage" parameterType="string" resultType="role">
+        select * from t_role
+        <if test="value !=null and value.length>0">
+            where keyword=#{value} or name like "%"#{value}"%"
+        </if>
+    </select>
+    <select id="findById" resultType="role" parameterType="int">
+        select * from  t_role where id=#{id}
+    </select>
+
+    <select id="findPermissionIdsByRoleId" parameterType="int" resultType="int">
+        select permission_id from t_role_permission where role_id=#{roleId}
+    </select>
+</mapper>

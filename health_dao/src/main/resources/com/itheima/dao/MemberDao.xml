@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.MemberDao">
+    <!--//根据手机号查询会员-->
+    <select id="findMemberByTelephone" parameterType="string" resultType="member">
+        select * from t_member where phoneNumber=#{telephone}
+    </select>
+    <insert id="add" parameterType="member">
+        <selectKey order="AFTER" keyProperty="id" resultType="integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into t_member(name,sex,idCard,phoneNumber,regTime) values
+        (#{name},#{sex},#{idCard},#{phoneNumber},#{regTime})
+    </insert>
+
+    <select id="findMemberCountByMonth" parameterType="string" resultType="int">
+            select count(*) from t_member where regTime &lt;= #{value}
+    </select>
+
+    <select id="findCountMemberByToday" parameterType="string" resultType="int">
+        select count(*) from t_member where regTime=#{todat}
+    </select>
+    <select id="findAllCountMember" resultType="int">
+        select count(*) from t_member
+    </select>
+    <select id="findCountMemberByDate" parameterType="map" resultType="int">
+                select count(*) from t_member where regTime between #{begin} and #{end}
+    </select>
+
+
+</mapper>
