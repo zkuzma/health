@@ -21,7 +21,7 @@
     <!--
         开启事务控制的注解支持
     -->
-    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
     <!--<import resource="classpath*:applicationContext-dao.xml"></import>-->
 
