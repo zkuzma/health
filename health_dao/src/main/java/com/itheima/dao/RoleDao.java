@@ -19,4 +19,6 @@ public interface RoleDao {
     Role findById(Integer id);
 
     List<Integer> findPermissionIdsByRoleId(Integer id);
+
+    List<Integer> findMenuIdsByRoleId(Integer id);
 }

@@ -64,4 +64,14 @@ public class RoleServiceImpl implements RoleService {
     public List<Integer> findPermissionIdsByRoleId(Integer id) {
         return roleDao.findPermissionIdsByRoleId(id);
     }
+
+    /**
+     * 根据角色id查询关联的菜单
+     * @param id
+     * @return
+     */
+    @Override
+    public List<Integer> findMenuIdsByRoleId(Integer id) {
+        return roleDao.findMenuIdsByRoleId(id);
+    }
 }

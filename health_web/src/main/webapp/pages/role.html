@@ -40,6 +40,28 @@
             position: relative;
             text-align: left;
         }
+        .datatableMenu {
+            position: relative;
+            box-sizing: border-box;
+            -webkit-box-flex: 1;
+            width: 100%;
+            max-width: 100%;
+            font-size: 14px;
+            color: rgb(96, 98, 102);
+            overflow: hidden;
+            flex: 1 1 0%;
+        }
+
+        .datatableMenu td, .datatableMenu th {
+            padding: 12px 0;
+            min-width: 0;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+            position: relative;
+            text-align: left;
+        }
     </style>
 </head>
 <body class="hold-transition">
@@ -136,6 +158,32 @@
                                     </table>
                                 </div>
                             </el-tab-pane>
+
+                            <el-tab-pane label="菜单信息" name="third">
+                                <div class="checkScrol">
+                                    <table class="datatableMenu">
+                                        <thead>
+                                        <tr>
+                                            <th>选择</th>
+                                            <th>菜单名</th>
+                                            <th>访问路径</th>
+                                            <th>描述</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="c in tableDataMenu">
+                                            <td>
+                                                <input :id="c.id" v-model="menuIds" type="checkbox" :value="c.id">
+                                            </td>
+                                            <td><label :for="c.id">{{c.name}}</label></td>
+                                            <td><label :for="c.id">{{c.linkUrl}}</label></td>
+                                            <td><label :for="c.id">{{c.description}}</label></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </el-tab-pane>
+
                         </el-tabs>
                     </template>
                     <div slot="footer" class="dialog-footer">
@@ -197,6 +245,32 @@
                                     </table>
                                 </div>
                             </el-tab-pane>
+
+                            <el-tab-pane label="菜单信息" name="third">
+                                <div class="checkScrol">
+                                    <table class="datatableMenu">
+                                        <thead>
+                                        <tr>
+                                            <th>选择</th>
+                                            <th>菜单名</th>
+                                            <th>访问路径</th>
+                                            <th>描述</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="c in tableDataMenu">
+                                            <td>
+                                                <input :id="c.id" v-model="menuIds" type="checkbox" :value="c.id">
+                                            </td>
+                                            <td><label :for="c.id">{{c.name}}</label></td>
+                                            <td><label :for="c.id">{{c.linkUrl}}</label></td>
+                                            <td><label :for="c.id">{{c.description}}</label></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </el-tab-pane>
+
                         </el-tabs>
                     </template>
                     <div slot="footer" class="dialog-footer">
@@ -224,7 +298,9 @@
             dataList: [],//列表数据
             formData: {},//表单数据
             tableData: [],//新增和编辑表单中对应的检查项列表数据
+            tableDataMenu: [],//新增和编辑表单中对应的菜单列表数据
             permissionIds: [],//新增和编辑表单中检查项对应的复选框，基于双向绑定可以进行回显和数据提交
+            menuIds: [],//新增和编辑表单中菜单对应的复选框，基于双向绑定可以进行回显和数据提交
             dialogFormVisible: false,//控制添加窗口显示/隐藏
             dialogFormVisible4Edit: false//控制编辑窗口显示/隐藏
         },
@@ -247,7 +323,7 @@
             },
             //添加
             handleAdd() {
-                axios.post("../checkgroup/add.do?checkitemIds="+this.checkitemIds,this.formData)
+                axios.post("../role/add.do?permissionIds="+this.permissionIds+"&&"+"menuIds="+this.menuIds,this.formData)
                     .then(response => {
                         if (response.data.flag) {
                             this.dialogFormVisible = false;
@@ -277,6 +353,7 @@
             resetForm() {
                 this.activeName = 'first';
                 this.checkitemIds=[];
+                this.menusIds=[];
                 this.formData={};
 
             },
@@ -285,10 +362,18 @@
 
                 this.dialogFormVisible = true;
                 this.resetForm();
-                axios.post("../checkitem/findAll.do").then(response => {
+                axios.post("../permission/findAll.do").then(response => {
                     if (response.data.flag) {
                         this.$message.success(response.data.message);
                         this.tableData = response.data.data;
+                    } else {
+                        this.$message.error((response.data.message));
+                    }
+
+                });
+                axios.post("../menu/findAll.do").then(response => {
+                    if (response.data.flag) {
+                        this.tableDataMenu = response.data.data;
                     } else {
                         this.$message.error((response.data.message));
                     }
@@ -308,6 +393,17 @@
                                     this.tableData = response.data.data;
                                     axios.post("../role/findPermissionIdsByRoleId.do?id="+row.id).then(response=>{
                                            this.permissionIds=response.data;
+                                    });
+
+                                } else {
+                                    this.$message.error((response.data.message));
+                                }
+                            });
+                            axios.post("../menu/findAll.do").then(response=>{
+                                if (response.data.flag){
+                                    this.tableDataMenu = response.data.data;
+                                    axios.post("../role/findMenuIdsByRoleId.do?id="+row.id).then(response=>{
+                                        this.menusIds=response.data;
                                     });
 
                                 } else {

@@ -27,9 +27,13 @@ public class RoleController {
     @Reference
     RoleService roleService;
     @RequestMapping("/add")
-    public Result add(@RequestBody CheckGroup checkGroup,Integer[] checkitemIds) {
+    public Result add(@RequestBody Role role,Integer[] menuIds,Integer[] permissionIds) {
         try {
-            checkGroupService.add(checkGroup,checkitemIds);
+            System.out.println("1");
+            System.out.println("1");
+            System.out.println("1");
+            System.out.println("1");
+//            roleService.add(role,menuIds);
         } catch (Exception e) {
             e.printStackTrace();
             return new Result(false, MessageConstant.ADD_CHECKGROUP_FAIL);
@@ -80,6 +84,21 @@ public class RoleController {
     public List<Integer> findCheckItemByCheckGroup(Integer id) {
 
         List<Integer> list = roleService.findPermissionIdsByRoleId(id);
+        if (list != null) {
+            return list;
+        } else {
+            return null;
+        }
+    }
+    /**
+     * 根据角色id查询关联的权限
+     * @param id
+     * @return
+     */
+    @RequestMapping("/findMenuIdsByRoleId")
+    public List<Integer> findMenuIdsByRoleId(Integer id) {
+
+        List<Integer> list = roleService.findMenuIdsByRoleId(id);
         if (list != null) {
             return list;
         } else {
