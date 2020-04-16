@@ -18,4 +18,10 @@ public interface RoleService {
     List<Integer> findPermissionIdsByRoleId(Integer id);
 
     List<Integer> findMenuIdsByRoleId(Integer id);
+
+    void add(Role role, Integer[] menuIds, Integer[] permissionIds);
+
+    void edit(Role role, Integer[] menuIds, Integer[] permissionIds);
+
+    void delete(Integer id);
 }

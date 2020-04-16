@@ -26,4 +26,59 @@
     <select id="findMenuIdsByRoleId" resultType="int" parameterType="int">
         select menu_id from t_role_menu where role_id=#{roleId}
     </select>
+
+    <insert id="add" parameterType="role">
+        <selectKey order="AFTER" keyProperty="id" resultType="integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert  into t_role (name,keyword,description)
+        values (#{name},#{keyword},#{description})
+    </insert>
+
+    <insert id="setRoleAndMenu" parameterType="map">
+        insert  into  t_role_menu(role_id,menu_id)
+        values (#{role_id},#{menu_id})
+    </insert>
+    <insert id="setRoleAndPermission" parameterType="map">
+        insert  into  t_role_permission(role_id,permission_id)
+        values (#{role_id},#{permission_id})
+    </insert>
+
+    <update id="edit" parameterType="role">
+        update t_role
+        <set>
+            <if test="name != null and name.length>0">
+                name = #{name},
+            </if>
+            <if test="keyword != null and keyword.length>0">
+                keyword = #{keyword},
+            </if>
+            <if test="description != null and description.length>0">
+                description = #{description},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="findCountMenuByRoleId" parameterType="int" resultType="int">
+        select count(*) from t_role_menu where role_id=#{role_id}
+    </select>
+    <select id="findCountPermissionByRoleId" parameterType="int" resultType="int">
+        select count(*) from t_role_permission where role_id=#{role_id}
+    </select>
+    <select id="deleteCountMenuByRoleId" parameterType="int">
+        delete from t_role_menu where role_id=#{role_id}
+    </select>
+    <select id="deleteCountPermissionByRoleId" parameterType="int">
+        delete from t_role_permission where role_id=#{role_id}
+    </select>
+
+    <delete id="delete" parameterType="int">
+        delete from t_role where id=#{id}
+    </delete>
+
+
 </mapper>
+
+
+

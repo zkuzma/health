@@ -74,4 +74,88 @@ public class RoleServiceImpl implements RoleService {
     public List<Integer> findMenuIdsByRoleId(Integer id) {
         return roleDao.findMenuIdsByRoleId(id);
     }
+
+    /**
+     * 增加角色
+     * @param role
+     * @param menuIds
+     * @param permissionIds
+     */
+    //添加角色
+    @Override
+    public void add(Role role, Integer[] menuIds, Integer[] permissionIds) {
+        roleDao.add(role);
+        //添加角色和菜单的关系
+        setRoleAndMenu(role.getId(),menuIds);
+        //添加角色和权限的关系
+        setRoleAndpermission(role.getId(),permissionIds);
+    }
+
+    /**
+     * 编辑角色
+     * @param role
+     * @param menuIds
+     * @param permissionIds
+     */
+    @Override
+    public void edit(Role role, Integer[] menuIds, Integer[] permissionIds) {
+        roleDao.edit(role);
+        //根据角色id查询关系菜单的数量
+        Integer countRole=roleDao.findCountMenuByRoleId(role.getId());
+        //根据角色id查询关系菜单的数量
+        Integer countPermission=roleDao.findCountPermissionByRoleId(role.getId());
+        if (countRole>0){
+            //删除所有角色和菜单的关系
+            roleDao.deleteCountMenuByRoleId(role.getId());
+        }
+        if (countPermission>0){
+            //删除所有角色和权限的关系
+            roleDao.deleteCountPermissionByRoleId(role.getId());
+
+        }
+
+        if (menuIds.length>0&&menuIds!=null){
+
+            setRoleAndMenu(role.getId(),menuIds);
+        }
+        if (permissionIds.length>0&&permissionIds!=null){
+
+            setRoleAndpermission(role.getId(),permissionIds);
+        }
+
+    }
+    //删除角色
+    @Override
+    public void delete(Integer id) {
+        Integer countMenu = roleDao.findCountMenuByRoleId(id);
+        if (countMenu>0){
+            throw new RuntimeException(MessageConstant.DELETE_ROLE_LOSE);
+
+        }
+        Integer countPermission = roleDao.findCountPermissionByRoleId(id);
+        if (countPermission>0){
+            throw new RuntimeException(MessageConstant.DELETE_ROLE_LOSE);
+        }
+        roleDao.delete(id);
+
+    }
+
+    private void setRoleAndpermission(Integer id, Integer[] permissionIds) {
+        Map<String,Object>map=new HashMap<>();
+        map.put("role_id",id);
+        for (Integer permissionId : permissionIds) {
+            map.put("permission_id",permissionId);
+            roleDao.setRoleAndPermission(map);
+        }
+    }
+
+    private void setRoleAndMenu(Integer id, Integer[] menuIds) {
+        Map<String,Object>map=new HashMap<>();
+        map.put("role_id",id);
+        for (Integer menuId : menuIds) {
+            map.put("menu_id",menuId);
+            roleDao.setRoleAndMenu(map);
+        }
+
+    }
 }

@@ -310,7 +310,7 @@
         methods: {
             //编辑
             handleEdit() {
-                axios.post("../checkgroup/edit.do?checkitemIds="+this.checkitemIds,this.formData).then(response=>{
+                axios.post("../role/edit.do?permissionIds="+this.permissionIds+"&&"+"menuIds="+this.menuIds,this.formData).then(response=>{
                     if (response.data.flag) {
                         this.dialogFormVisible4Edit = false;
                         this.$message.success(response.data.message);
@@ -383,6 +383,7 @@
             // 弹出编辑窗口
             handleUpdate(row) {
                 this.dialogFormVisible4Edit=true;
+                this.activeName='first';
                 axios.post("../role/findById.do?id="+row.id)
                     .then(response=>{
                         if (response.data.flag){
@@ -403,7 +404,7 @@
                                 if (response.data.flag){
                                     this.tableDataMenu = response.data.data;
                                     axios.post("../role/findMenuIdsByRoleId.do?id="+row.id).then(response=>{
-                                        this.menusIds=response.data;
+                                        this.menuIds=response.data;
                                     });
 
                                 } else {
@@ -427,7 +428,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    axios.get("../checkgroup/delete.do?id="+row.id).then(response=>{
+                    axios.get("../role/delete.do?id="+row.id).then(response=>{
                         if (response.data.flag){
                             this.$message.success(response.data.message);
                             this.findPage();

@@ -29,16 +29,13 @@ public class RoleController {
     @RequestMapping("/add")
     public Result add(@RequestBody Role role,Integer[] menuIds,Integer[] permissionIds) {
         try {
-            System.out.println("1");
-            System.out.println("1");
-            System.out.println("1");
-            System.out.println("1");
-//            roleService.add(role,menuIds);
+
+            roleService.add(role,menuIds,permissionIds);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false, MessageConstant.ADD_CHECKGROUP_FAIL);
+            return new Result(false, MessageConstant.ADD_ROLE_FAIL);
         }
-        return new Result(true, MessageConstant.ADD_CHECKGROUP_SUCCESS);
+        return new Result(true, MessageConstant.ADD_ROLE_SUCCESS);
 
     }
 
@@ -108,19 +105,19 @@ public class RoleController {
 
     /**
      * 编辑检查组
-     * @param checkGroup
-     * @param checkitemIds
+     * @param role
+     * @param permissionIds
      * @return
      */
     @RequestMapping("/edit")
-    public Result edit(@RequestBody CheckGroup checkGroup,Integer[] checkitemIds) {
+    public Result edit(@RequestBody Role role,Integer[] menuIds,Integer[] permissionIds) {
         try {
-            checkGroupService.edit(checkGroup,checkitemIds);
+            roleService.edit(role,menuIds,permissionIds);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false, MessageConstant.EDIT_CHECKITEM_FAIL);
+            return new Result(false, MessageConstant.EDIT_ROLE_FAIL);
         }
-        return new Result(true, MessageConstant.EDIT_CHECKITEM_SUCCESS);
+        return new Result(true, MessageConstant.EDIT_ROLE_SUCCESS);
 
     }
 
@@ -133,15 +130,15 @@ public class RoleController {
     @RequestMapping("/delete")
     public Result delete(Integer id) {
         try {
-            checkGroupService.delete(id);
+            roleService.delete(id);
         }catch (RuntimeException e) {
             e.printStackTrace();
             return new Result(false, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false, MessageConstant.DELETE_CHECKGROUP_FAIL);
+            return new Result(false, MessageConstant.DELETE_ROLE_FAIL);
         }
-        return new Result(true, MessageConstant.DELETE_CHECKGROUP_SUCCESS);
+        return new Result(true, MessageConstant.DELETE_ROLE_SUCCESS);
 
     }
 
