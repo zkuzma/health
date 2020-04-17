@@ -44,4 +44,6 @@ public interface RoleDao {
     void deleteCountPermissionByRoleId(Integer id);
 
     void delete(Integer id);
+
+    List<Role> findAll();
 }

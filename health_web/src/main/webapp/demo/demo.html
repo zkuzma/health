@@ -8,19 +8,25 @@
 <body>
 <div id="app">
 
-
+    <span class="demonstration">默认</span>
+    <el-date-picker
+            v-model="value1"
+            type="monthrange"
+            range-separator="至"
+            start-placeholder="开始月份"
+            end-placeholder="结束月份">
+    </el-date-picker>
     <!--布局组件-->
-
 
 </div>
 
 <script src="elementui/vue.js"></script>
 <script src="elementui/index.js"></script>
 <script>
-    new Vue({
+    var vvv=new Vue({
         el: '#app',
         data: {
-
+            value:{},
         }
     })
 

@@ -77,6 +77,10 @@
         delete from t_role where id=#{id}
     </delete>
 
+    <select id="findAll" resultType="role">
+        select * from t_role
+    </select>
+
 
 </mapper>
 

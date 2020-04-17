@@ -140,6 +140,11 @@ public class RoleServiceImpl implements RoleService {
 
     }
 
+    @Override
+    public List<Role> findAll() {
+        return roleDao.findAll();
+    }
+
     private void setRoleAndpermission(Integer id, Integer[] permissionIds) {
         Map<String,Object>map=new HashMap<>();
         map.put("role_id",id);

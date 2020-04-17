@@ -23,9 +23,19 @@ import java.util.List;
 @RequestMapping("/role")
 public class RoleController {
     @Reference
-    CheckGroupService checkGroupService;
-    @Reference
     RoleService roleService;
+
+    @RequestMapping("/findAll")
+    public Result findAll() {
+        List<Role> list = roleService.findAll();
+        if (list != null && list.size() > 0) {
+            return new Result(true, MessageConstant.QUERY_ROLE_SUCCESS, list);
+        } else {
+            return new Result(false, MessageConstant.QUERY_ROLE_FAIL);
+        }
+
+    }
+
     @RequestMapping("/add")
     public Result add(@RequestBody Role role,Integer[] menuIds,Integer[] permissionIds) {
         try {

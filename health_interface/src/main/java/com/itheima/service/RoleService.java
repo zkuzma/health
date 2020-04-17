@@ -24,4 +24,6 @@ public interface RoleService {
     void edit(Role role, Integer[] menuIds, Integer[] permissionIds);
 
     void delete(Integer id);
+
+    List<Role> findAll();
 }

@@ -103,6 +103,16 @@ public class MessageConstant {
     public static final String EDIT_ROLE_SUCCESS = "编辑角色成功";
     public static final String DELETE_ROLE_LOSE = "此角色与权限,或用户有关联,不能删除!";
 
+    public static final String ADD_USER_FAIL = "新增用户失败";
+    public static final String ADD_USER_SUCCESS = "新增用户成功";
+    public static final String DELETE_USER_FAIL = "删除用户失败";
+    public static final String DELETE_USER_SUCCESS = "删除用户成功";
+    public static final String QUERY_USER_SUCCESS = "查询用户成功";
+    public static final String QUERY_USER_FAIL = "查询用户失败";
+    public static final String EDIT_USER_FAIL = "编辑用户失败";
+    public static final String EDIT_USER_SUCCESS = "编辑用户成功";
+    public static final String DELETE_USER_LOSE = "此用户与角色有关联,不能删除!";
+
 
 
 }

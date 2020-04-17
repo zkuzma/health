@@ -10,7 +10,11 @@
         <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
         <!-- 引入样式 -->
         <link rel="stylesheet" href="../css/style.css">
+
+        <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
         <script src="../plugins/echarts/echarts.js"></script>
+
+
     </head>
     <body class="hold-transition">
         <div id="app">
@@ -21,47 +25,84 @@
                     <el-breadcrumb-item>统计分析</el-breadcrumb-item>
                     <el-breadcrumb-item>会员数量</el-breadcrumb-item>
                 </el-breadcrumb>
+
             </div>
             <div class="app-container">
+
+
+                <div class="block" style="text-align: center">
+                    <el-date-picker
+                            unlink-panels="false"
+                            v-model="value"
+                            type="monthrange"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                    :change="changeDate()">
+                    </el-date-picker>
+                </div>
+
                 <div class="box">
                     <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
-                    <div id="chart1" style="height:600px;"></div>
+                    <div id="chart1" style="height:600px;">
+                    </div>
+
                 </div>
             </div>
         </div>
     </body>
     <!-- 引入组件库 -->
     <script src="../js/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script src="../js/axios-0.18.0.js"></script>
+
     <script type="text/javascript">
+        new Vue({
+            el: '#app',
+            data: {
+                value:{}
+            },
+            mounted(){
+                this.firstInit();
+            },
+            methods:{
+                changeDate(){
+                    this.firstInit();
+                },
+                firstInit(){
+                    var myChart1 = echarts.init(document.getElementById('chart1'));
+
+                    // 使用刚指定的配置项和数据显示图表。
+                    //myChart.setOption(option);
+
+                    axios.post("../report/getMemberReport.do",this.value).then((res)=>{
+                        myChart1.setOption(
+                            {
+                                title: {
+                                    text: '会员数量'
+                                },
+                                tooltip: {},
+                                legend: {
+                                    data:['会员数量']
+                                },
+                                xAxis: {
+                                    data: res.data.data.months
+                                },
+                                yAxis: {
+                                    type:'value'
+                                },
+                                series: [{
+                                    name: '会员数量',
+                                    type: 'line',
+                                    data: res.data.data.memberCount,
+
+                                }]
+                            });
+                    });
+                }
+            }
+        })
+
         // 基于准备好的dom，初始化echarts实例
-        var myChart1 = echarts.init(document.getElementById('chart1'));
 
-        // 使用刚指定的配置项和数据显示图表。
-        //myChart.setOption(option);
-
-        axios.get("/report/getMemberReport.do").then((res)=>{
-            myChart1.setOption(
-                                {
-                                    title: {
-                                        text: '会员数量'
-                                    },
-                                    tooltip: {},
-                                    legend: {
-                                        data:['会员数量']
-                                    },
-                                    xAxis: {
-                                        data: res.data.data.months
-                                    },
-                                    yAxis: {
-                                        type:'value'
-                                    },
-                                    series: [{
-                                        name: '会员数量',
-                                        type: 'line',
-                                        data: res.data.data.memberCount
-                                    }]
-                                });
-        });
     </script>
 </html>
